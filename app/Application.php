@@ -2,6 +2,8 @@
 
 namespace Key4Events;
 
+use Key4Events\Controllers\CoreController;
+
 class Application {
 
     private $router;
@@ -34,13 +36,15 @@ class Application {
     }
 
     private function defineRoutes() {
-        // $this->router->map('HTTP METHOD', 'ROUTE NAME', 'CONTROLLERNAME#METHODNAME', 'ROUTE RETOUR');
         
-        $this->router->map('GET', '/lists', 'ListController#list', 'lists-list');
-        $this->router->map('POST', '/lists/add', 'ListController#add', 'lists-add');
-        $this->router->map('GET', '/lists/[i:id]', 'ListController#detail', 'lists-detail');
-        $this->router->map('POST', '/lists/[i:id]/update', 'ListController#update', 'lists-update');
-        $this->router->map('POST', '/lists/[i:id]/delete', 'ListController#delete', 'lists-delete');
+        $this->router->map('GET', '/', 'MainController#login', 'login');
+        $this->router->map('POST', '/', 'MainController#login', 'loginPost');
+        $this->router->map('GET', '/logout', 'MainController#logout', 'logout');
+        $this->router->map('GET', '/home', 'MainController#home', 'home');
+        $this->router->map('GET', '/profile/[i:id]', 'UserController#profile', 'profile');
+        $this->router->map('POST', '/profile/[i:id]/update', 'UserController#update', 'update');
+        $this->router->map('POST', '/profile/create', 'UserController#create', 'create');
+        $this->router->map('POST', '/profile/[i:id]/delete', 'UserController#delete', 'delete');
     }
 }
 

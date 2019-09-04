@@ -1,0 +1,9 @@
+#profile-tag {
+  position: relative;
+}
+
+#profile-role {
+  position: absolute;
+  bottom: 0;
+  right: 0.3em;
+}

@@ -32,14 +32,19 @@ class UserModel {
     protected $password;
 
     /**
-     * @var \Datetime
+     * @var string
      */
-    protected $createdAt;
+    protected $role;
 
     /**
      * @var \Datetime
      */
-    protected $updatedAt;
+    protected $created_at;
+
+    /**
+     * @var \Datetime
+     */
+    protected $updated_at;
 
     /**
      * @var PDO
@@ -85,9 +90,9 @@ class UserModel {
      * 
      * @return UserModel
      */
-    public function findAll() {
-        $stmt = self::getDB()->query("SELECT * FROM `user`;");
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'UserModel');
+    public static function findAll() {
+        $stmt = self::getDB()->query("SELECT * FROM `user` ORDER BY `lastname` ASC;");
+        return $stmt->fetchAll(PDO::FETCH_CLASS, self::class);
     }
 
     /**
@@ -96,10 +101,22 @@ class UserModel {
      * @var string
      * @return UserModel
      */
-    public function findById($id) {
+    public static function findById($id) {
         $stmt = self::getDB()->prepare("SELECT * FROM `user` WHERE `id` = :id;");
         $stmt->execute([':id' => $id]);
-        return $stmt->fetchObject('UserModel');
+        return $stmt->fetchObject(self::class);
+    }
+
+    /**
+     * Get an user by email
+     * 
+     * @var string
+     * @return UserModel
+     */
+    public static function findByEmail($email) {
+        $stmt = self::getDB()->prepare("SELECT * FROM `user` WHERE `email` = :email;");
+        $stmt->execute([':email' => $email]);
+        return $stmt->fetchObject(self::class);
     }
 
     /**
@@ -107,19 +124,16 @@ class UserModel {
      * 
      * @return int
      */
-    public function create($lastname, $firstname, $email, $password) {
-        $stmt = self::getDB()->prepare("INSERT INTO `user` (`lastname`, `firstname`, `email`, `password`) VALUES (:lastname, :firstname, :email, :password);");
+    public static function create($lastname, $firstname, $email, $password, $role) {
+        $stmt = self::getDB()->prepare("INSERT INTO `user` (`lastname`, `firstname`, `email`, `password`, `role`) VALUES (:lastname, :firstname, :email, :password, :role);");
         $stmt->execute([
             ':lastname' => $lastname,
             ':firstname' => $firstname,
             ':email' => $email,
-            ':password' => $password
+            ':password' => $password,
+            ':role' => $role
         ]);
-        $done = $stmt->rowCount();
-        if ($done) {
-            $this->id = self::getDB()->lastInsertId();
-        }
-        return $done;
+        return $stmt->rowCount();
     }
 
     /**
@@ -127,14 +141,15 @@ class UserModel {
      * 
      * @return int
      */
-    public function update($id, $lastname, $firstname, $email, $password) {
-        $stmt = self::getDB()->prepare("UPDATE `user` SET `lastname` = :lastname, `firstname` = :firstname, `email` = :email, `password` = :password, `updated_at` = CURRENT_TIMESTAMP WHERE `id` = :id;");
+    public static function update($id, $lastname, $firstname, $email, $password, $role) {
+        $stmt = self::getDB()->prepare("UPDATE `user` SET `lastname` = :lastname, `firstname` = :firstname, `email` = :email, `password` = :password, `role` = :role, `updated_at` = CURRENT_TIMESTAMP WHERE `id` = :id;");
         $stmt->execute([
             ':id' => $id,
             ':lastname' => $lastname,
             ':firstname' => $firstname,
             ':email' => $email,
-            ':password' => $password
+            ':password' => $password,
+            ':role' => $role
         ]);
         return $stmt->rowCount();
     }
@@ -144,7 +159,7 @@ class UserModel {
      * 
      * @return int
      */
-    public function delete($id) {
+    public static function delete($id) {
         $stmt = self::getDB()->prepare("DELETE FROM `user` WHERE `id` = :id;");
         $stmt->execute([':id' => $id]);
         return $stmt->rowCount();
@@ -205,22 +220,29 @@ class UserModel {
     }
 
     /**
+     * Get the value of roles
+     * 
+     * @return array
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+
+    /**
      * Get the value of createdAt
-     *
-     * @return  \Datetime
      */ 
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     /**
      * Get the value of updatedAt
-     *
-     * @return  \Datetime
      */ 
     public function getUpdatedAt()
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 }
