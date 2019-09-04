@@ -44,6 +44,7 @@ class MainController extends CoreController {
             unset($_SESSION['userId']);
             unset($_SESSION['token']);
         };
+        session_destroy();
         $this->redirectToLogin();
     }
 

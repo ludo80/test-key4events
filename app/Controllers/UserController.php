@@ -32,12 +32,12 @@ class UserController extends CoreController {
         if (isset($_SESSION['user'])) {
 
             if (!empty($_POST['lastname'])) {
-                $lastname = trim($_POST['lastname']);
+                $lastname = htmlspecialchars(trim($_POST['lastname']));
             } else {
                 $infomessages[] = 'Veuillez entrer un nom';
             };
             if (!empty($_POST['firstname'])) {
-                $firstname = trim($_POST['firstname']);
+                $firstname = htmlspecialchars(trim($_POST['firstname']));
             } else {
                 $infomessages[] = 'Veuillez entrer un prénom';
             };
@@ -98,12 +98,12 @@ class UserController extends CoreController {
             $currentUser =  UserModel::findById($id);
 
             if (!empty($_POST['lastname'])) {
-                $lastname = trim($_POST['lastname']);
+                $lastname = htmlspecialchars(trim($_POST['lastname']));
             } else {
                 $infomessages[] = 'Veuillez entrer un nom';
             };
             if (!empty($_POST['firstname'])) {
-                $firstname = trim($_POST['firstname']);
+                $firstname = htmlspecialchars(trim($_POST['firstname']));
             } else {
                 $infomessages[] = 'Veuillez entrer un prénom';
             };

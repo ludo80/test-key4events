@@ -20,6 +20,6 @@ class CoreController {
     }
 
     protected function redirectToLogin() {
-        header('Location: '.$_SERVER['BASE_URI']);
+        header('Location: www.key4events.lnachez.com');
     }
 }
